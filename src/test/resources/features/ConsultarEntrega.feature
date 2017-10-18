@@ -6,33 +6,33 @@ Funcionalidade: Consultar Entrega
 
   Cenario: Consultar um protocolo valido
     Dado um PROTOCOLO valido:
-      | protocolo | 13083970 |
+      | protocolo | SQ458226057BR |
     Quando eu informo o PROTOCOLO na consulta de entrega
-    Entao o resultado deve ser:
-      | Protocolo | Status       |
-      | 13083970  | Em andamento |
+    Entao O resultado deve ser o protocolo  
+      | Protocolo      | Status       |
+      | SQ458226057BR  | Em andamento |
 
   Cenario: Consultar uma entrega com PROTOCOLO nao existente
     Dado um PROTOCOLO nao existente:
-      | protocolo | 99999999 |
+      | protocolo | SQ458226057BR |
     Quando eu informo o PROTOCOLO na consulta de entrega
     Entao o retorno deve conter um valor de erro igual a "true"
 
   Cenario: Consultar o status de entrega com PROTOCOLO invalido.
     Dado um PROTOCOLO invalido:
-      | protocolo | 1234567890 |
+      | protocolo | SQ458226057BR |
     Quando eu informo o PROTOCOLO na consulta de entrega
-    Entao uma excecao deve ser lancada com a mensagem de erro:
+    Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
     O PROTOCOLO informado e invalido
     """
 
   Cenario: Servico ConsultaEntrega nao responde
     Dado um PROTOCOLO valido:
-      | protocolo | 13083970 |
-    E o servico ViaCep nao esta respondendo
+      | protocolo | SQ458226057BR |
+    E o servico SROProtocolo nao esta respondendo
     Quando eu informo o PROTOCOLO na consulta de entrega
-    Entao uma excecao deve ser lancada com a mensagem de erro:
+    Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
     Servico indisponivel
     """

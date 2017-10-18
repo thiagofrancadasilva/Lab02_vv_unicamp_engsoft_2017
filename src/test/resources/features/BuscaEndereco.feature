@@ -34,5 +34,5 @@ Funcionalidade: Buscar Endereco
     Quando eu informo o CEP na busca de enderecos
     Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
-    Serviço indisponivel
+    Servico indisponivel
     """

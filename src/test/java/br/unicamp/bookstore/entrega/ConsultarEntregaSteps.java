@@ -51,7 +51,7 @@ public class ConsultarEntregaSteps {
 		wireMockServer = new WireMockServer(9876);
 		wireMockServer.start();
 		MockitoAnnotations.initMocks(this);
-		Mockito.when(configuration.getStatusEntregaUrl()).thenReturn("http://localhost:9876/ws");
+		Mockito.when(configuration.getStatusEntregaUrl()).thenReturn("http://localhost:9876/sro_bin/sroii_xml.eventos");
 		statusEncomenda = null;
 		protocolo = null;
 		throwable = null;
@@ -63,35 +63,35 @@ public class ConsultarEntregaSteps {
 	}
 
 	@Dado("^um PROTOCOLO valido:$")
-	public void eu_possuo_um_CEP_valido(Map<String, String> map) throws Throwable {
+	public void eu_possuo_um_PROTOCOLO_valido(Map<String, String> map) throws Throwable {
 		protocolo = map.get("protocolo");
-		wireMockServer.stubFor(get(urlMatching("/ws/"+ protocolo + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
+		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/"+ protocolo + ".*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("consultar-status-entrega.xml")));
 	}
 
 	@Dado("^um PROTOCOLO nao existente:$")
-	public void um_CEP_nao_existente(Map<String, String> map) throws Throwable {
+	public void um_PROTOCOLO_nao_existente(Map<String, String> map) throws Throwable {
 		protocolo = map.get("cep");
-		wireMockServer.stubFor(get(urlMatching("/ws/" + protocolo + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco_ERR.xml")));
+		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/" + protocolo + ".*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("consultar-status-entrega_ERR.xml")));
 
 	}
 
 	@Dado("^um PROTOCOLO invalido:")
-	public void um_CEP_invalido(Map<String, String> map) throws Throwable {
+	public void um_PROTOCOLO_invalido(Map<String, String> map) throws Throwable {
 		protocolo = map.get("cep");
-		wireMockServer.stubFor(get(urlMatching("/ws/" + protocolo + ".*"))
+		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/" + protocolo + ".*"))
 				.willReturn(aResponse().withStatus(400).withHeader("Content-Type", "text/xml")
-						.withBodyFile("resultado-pesquisa-BuscaEndereco_BAD.xml")));
+						.withBodyFile("consultar-status-entrega_BAD.xml")));
 	}
 
 	@Quando("^eu informo o PROTOCOLO na consulta de entrega$")
-	public void eu_informo_o_CEP_na_busca_de_endereco() throws Throwable {
+	public void eu_informo_o_PROTOCOLO_na_busca_de_endereco() throws Throwable {
 		throwable = catchThrowable(() -> this.statusEncomenda = consultarEntregaService.buscar(protocolo));
 	}
 
-	@Entao("^o resultado deve ser$")
-	public void o_resultado_deve_ser_o_endereco(List<Map<String,String>> resultado)
+	@Entao("^O resultado deve ser o protocolo:$")
+	public void o_resultado_deve_ser_o_protocolo(List<Map<String,String>> resultado)
 			throws Throwable {
 		assertThat(this.statusEncomenda.getTipo()).isEqualTo(resultado.get(0).get("Tipo"));
 		assertThat(this.statusEncomenda.getStatus()).isEqualTo(resultado.get(0).get("Status"));
@@ -104,13 +104,13 @@ public class ConsultarEntregaSteps {
 		assertThat(throwable).isNull();
 	}
 
-	@E("O servico ViaCep nao esta respondendo$")
-	public void o_servico_via_cep_nao_esta_respondendo() throws Throwable {
-		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
-				.withFixedDelay(6000).withBodyFile("resultado-pesquisa-BuscaEndereco_out.xml")));
+	@E("^o servico SROProtocolo nao esta respondendo$")
+	public void o_servico_SROProtocolo_nao_esta_respondendo() throws Throwable {
+		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/.*")).willReturn(aResponse().withStatus(200)
+				.withFixedDelay(6000).withBodyFile("consultar-status-entrega_out.xml")));
 	}
 
-	@Entao("Uma excecao deve ser lancada com a mensagem de erro:$")
+	@Entao("^uma excecao deve ser lancada com a mensagem de erro:$")
 	public void uma_excecao_deve_ser_lancada_com_a_mensagem_de_erro(String message) throws Throwable {
 		assertThat(throwable).hasMessage(message);
 	}
