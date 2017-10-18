@@ -8,7 +8,7 @@ Funcionalidade: Consultar Entrega
     Dado um PROTOCOLO valido:
       | protocolo | SQ458226057BR |
     Quando eu informo o PROTOCOLO na consulta de entrega
-    Entao o resultado deve ser o protocolo:
+    Entao o resultado deve ser o status:
       | Protocolo      | Status       |
       | SQ458226057BR  | Em andamento |
 
