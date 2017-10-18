@@ -90,7 +90,7 @@ public class ConsultarEntregaSteps {
 		throwable = catchThrowable(() -> this.statusEncomenda = consultarEntregaService.buscar(protocolo));
 	}
 
-	@Entao("^O resultado deve ser o protocolo:$")
+	@Entao("^o resultado deve ser o protocolo:$")
 	public void o_resultado_deve_ser_o_protocolo(List<Map<String,String>> resultado)
 			throws Throwable {
 		assertThat(this.statusEncomenda.getTipo()).isEqualTo(resultado.get(0).get("Tipo"));
