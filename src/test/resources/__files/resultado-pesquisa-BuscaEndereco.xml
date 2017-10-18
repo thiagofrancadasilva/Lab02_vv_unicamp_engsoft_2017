@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmlcep>
+	<cep>13083-970</cep>
+	<logradouro>Rua Carlos Gomes</logradouro>
+	<complemento>241</complemento>
+	<bairro>Cidade Universitária</bairro>
+	<localidade>Campinas</localidade>
+	<uf>SP</uf>
+	<unidade/>
+	<ibge>3509502</ibge>
+	<gia>2446</gia>
+</xmlcep>
