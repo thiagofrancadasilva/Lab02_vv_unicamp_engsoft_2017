@@ -100,7 +100,7 @@ public class ConsultarEntregaSteps {
 
 	@Entao("^o retorno deve conter um valor de erro igual a \"([^\"]*)\"$")
 	public void o_retorno_deve_conter_um_valor_de_erro_igual_a(String erro) throws Throwable {
-		assertThat(StatusEncomenda.getErro()).isEqualTo(erro);
+		assertThat(statusEncomenda.getErro()).isEqualTo(erro);
 		assertThat(throwable).isNull();
 	}
 
