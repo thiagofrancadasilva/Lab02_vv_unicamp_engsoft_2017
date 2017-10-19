@@ -8,7 +8,7 @@ Funcionalidade: Calcular Frete
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
     Quando eu informo o CEP no calculo de frete
-    Entao O resultado deve ser o valor do frete e tempo de entrega: 
+    Entao O resultado deve ser o valor do frete e tempo de entrega:
       | Valor do Frete       | Tempo   |
       | R$10,00 | 7 dias |
       
@@ -16,7 +16,7 @@ Funcionalidade: Calcular Frete
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | SEDEX |
     Quando eu informo o CEP no calculo de frete
-    Entao O resultado deve ser o valor do frete e tempo de entrega: 
+    Entao O resultado deve ser o valor do frete e tempo de entrega:
       | Valor do Frete       | Tempo   |
       | R$20,00 | 5 dias |
       
@@ -24,7 +24,7 @@ Funcionalidade: Calcular Frete
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | SEDEX 10 |
     Quando eu informo o CEP no calculo de frete
-    Entao O resultado deve ser o valor do frete e tempo de entrega: 
+    Entao O resultado deve ser o valor do frete e tempo de entrega:
       | Valor do Frete       | Tempo   |
       | R$30,00 | 1 dias |
 
@@ -62,7 +62,7 @@ Funcionalidade: Calcular Frete
   Cenario: Servico ViaCep nao responde
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
-    E O servico ViaCep nao esta respondendo 
+    E O servico ViaCep nao esta respondendo
     Quando eu informo o CEP no calculo de frete
     Entao Uma excecao deve ser lancada com a mensagem de erro:
     """

@@ -18,6 +18,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 
 import br.unicamp.bookstore.Configuracao;
 import br.unicamp.bookstore.model.Endereco;
+import br.unicamp.bookstore.model.Frete;
 import br.unicamp.bookstore.service.BuscaEnderecoService;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -38,18 +39,21 @@ public class CalcularFreteSteps {
 
 	private Endereco endereco;
 
+	private Frete frete;
+
 	private String cep;
-	
+
 	private float peso;
-	
+
 	private float largura;
-	
+
+	private float altura;
+
 	private float comprimento;
-	
+
 	private String entrega;
 
 	private Throwable throwable;
-
 
 	@Before
 	public void setUp() {
@@ -61,6 +65,7 @@ public class CalcularFreteSteps {
 		cep = null;
 		peso = 0;
 		largura = 0;
+		altura = 0;
 		comprimento = 0;
 		entrega = null;
 		throwable = null;
@@ -71,65 +76,64 @@ public class CalcularFreteSteps {
 		wireMockServer.stop();
 	}
 
-	@Dado("^um CEP valido e dado do produto e tipo de entrega valido$")
+	@Dado("^um CEP valido e dado do produto e tipo de entrega valido:$")
 	public void eu_possuo_um_CEP_valido_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
-		peso = map.get("peso");
-		largura = map.get("largura");
-		altura = map.get("altura");
-		comprimento = map.get("comprimento");
+		peso = Float.valueOf(map.get("peso"));
+		largura = Float.valueOf(map.get("largura"));
+		altura = Float.valueOf(map.get("altura"));
+		comprimento = Float.valueOf(map.get("comprimento"));
 		entrega = map.get("entrega");
-		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
+		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
 	}
 
 	@Dado("^um CEP nao existente e dado do produto e tipo de entrega valido:$")
 	public void um_CEP_nao_existente_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
-		peso = map.get("peso");
-		largura = map.get("largura");
-		altura = map.get("altura");
-		comprimento = map.get("comprimento");
+		peso = Float.valueOf(map.get("peso"));
+		largura = Float.valueOf(map.get("largura"));
+		altura = Float.valueOf(map.get("altura"));
+		comprimento = Float.valueOf(map.get("comprimento"));
 		entrega = map.get("entrega");
 		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco_ERR.xml")));
 
 	}
-	
+
 	@Dado("^um CEP valido e dado do produto e tipo de entrega nao existente:$")
 	public void eu_possuo_um_CEP_valido_e_produto_nao_existente(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
-		peso = map.get("peso");
-		largura = map.get("largura");
-		altura = map.get("altura");
-		comprimento = map.get("comprimento");
+		peso = Float.valueOf(map.get("peso"));
+		largura = Float.valueOf(map.get("largura"));
+		altura = Float.valueOf(map.get("altura"));
+		comprimento = Float.valueOf(map.get("comprimento"));
 		entrega = map.get("entrega");
-		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
+		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
 	}
 
-	@Dado("^um CEP invalido e dado do produto e tipo de entrega valido:")
+	@Dado("^um CEP invalido e dado do produto e tipo de entrega valido:$")
 	public void um_CEP_invalido_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
-		peso = map.get("peso");
-		largura = map.get("largura");
-		altura = map.get("altura");
-		comprimento = map.get("comprimento");
+		peso = Float.valueOf(map.get("peso"));
+		largura = Float.valueOf(map.get("largura"));
+		altura = Float.valueOf(map.get("altura"));
+		comprimento = Float.valueOf(map.get("comprimento"));
 		entrega = map.get("entrega");
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*"))
-				.willReturn(aResponse().withStatus(400).withHeader("Content-Type", "text/xml")
-						.withBodyFile("resultado-pesquisa-BuscaEndereco_BAD.xml")));
+		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(400)
+				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco_BAD.xml")));
 	}
-	
+
 	@Dado("^um CEP valido e dado do produto e tipo de entrega invalido:$")
 	public void eu_possuo_um_CEP_valido_e_produto_invalido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
-		peso = map.get("peso");
-		largura = map.get("largura");
-		altura = map.get("altura");
-		comprimento = map.get("comprimento");
+		peso = Float.valueOf(map.get("peso"));
+		largura = Float.valueOf(map.get("largura"));
+		altura = Float.valueOf(map.get("altura"));
+		comprimento = Float.valueOf(map.get("comprimento"));
 		entrega = map.get("entrega");
-		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
+		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
 	}
 
@@ -139,10 +143,9 @@ public class CalcularFreteSteps {
 	}
 
 	@Entao("^O resultado deve ser o valor do frete e tempo de entrega:$")
-	public void o_resultado_deve_ser_o_endereco(List<Map<String,String>> resultado)
-			throws Throwable {
-		assertThat(this.frete.getValor()).isEqualTo(resultado.get(0).get("Valor do Frete "));
-		assertThat(this.frete.getTempo()).isEqualTo(resultado.get(0).get("Tempo"));
+	public void o_resultado_deve_ser_o_endereco(List<Map<String, String>> resultado) throws Throwable {
+		assertThat(this.frete.getValorFrete()).isEqualTo(resultado.get(0).get("valorFrete"));
+		assertThat(this.frete.getTempoEntrega()).isEqualTo(resultado.get(0).get("tempoEntrega"));
 		assertThat(throwable).isNull();
 	}
 
@@ -154,8 +157,8 @@ public class CalcularFreteSteps {
 
 	@E("O servico ViaCep nao esta respondendo$")
 	public void o_servico_via_cep_nao_esta_respondendo() throws Throwable {
-		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
-				.withFixedDelay(6000).withBodyFile("resultado-pesquisa-BuscaEndereco_out.xml")));
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200).withFixedDelay(6000)
+				.withBodyFile("resultado-pesquisa-BuscaEndereco_out.xml")));
 	}
 
 	@Entao("Uma excecao deve ser lancada com a mensagem de erro:$")
