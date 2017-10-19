@@ -39,6 +39,14 @@ public class CalcularFreteSteps {
 	private Endereco endereco;
 
 	private String cep;
+	
+	private float peso;
+	
+	private float largura;
+	
+	private float comprimento;
+	
+	private String entrega;
 
 	private Throwable throwable;
 
@@ -51,6 +59,10 @@ public class CalcularFreteSteps {
 		Mockito.when(configuration.getBuscarEnderecoUrl()).thenReturn("http://localhost:9876/ws");
 		endereco = null;
 		cep = null;
+		peso = 0;
+		largura = 0;
+		comprimento = 0;
+		entrega = null;
 		throwable = null;
 	}
 
@@ -60,44 +72,83 @@ public class CalcularFreteSteps {
 	}
 
 	@Dado("^um CEP valido e dado do produto e tipo de entrega valido$")
-	public void eu_possuo_um_CEP_valido(Map<String, String> map) throws Throwable {
+	public void eu_possuo_um_CEP_valido_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
+		peso = map.get("peso");
+		largura = map.get("largura");
+		altura = map.get("altura");
+		comprimento = map.get("comprimento");
+		entrega = map.get("entrega");
 		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
 	}
 
 	@Dado("^um CEP nao existente e dado do produto e tipo de entrega valido:$")
-	public void um_CEP_nao_existente(Map<String, String> map) throws Throwable {
+	public void um_CEP_nao_existente_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
+		peso = map.get("peso");
+		largura = map.get("largura");
+		altura = map.get("altura");
+		comprimento = map.get("comprimento");
+		entrega = map.get("entrega");
 		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco_ERR.xml")));
 
 	}
+	
+	@Dado("^um CEP valido e dado do produto e tipo de entrega nao existente:$")
+	public void eu_possuo_um_CEP_valido_e_produto_nao_existente(Map<String, String> map) throws Throwable {
+		cep = map.get("cep");
+		peso = map.get("peso");
+		largura = map.get("largura");
+		altura = map.get("altura");
+		comprimento = map.get("comprimento");
+		entrega = map.get("entrega");
+		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
+	}
 
 	@Dado("^um CEP invalido e dado do produto e tipo de entrega valido:")
-	public void um_CEP_invalido(Map<String, String> map) throws Throwable {
+	public void um_CEP_invalido_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
+		peso = map.get("peso");
+		largura = map.get("largura");
+		altura = map.get("altura");
+		comprimento = map.get("comprimento");
+		entrega = map.get("entrega");
 		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*"))
 				.willReturn(aResponse().withStatus(400).withHeader("Content-Type", "text/xml")
 						.withBodyFile("resultado-pesquisa-BuscaEndereco_BAD.xml")));
 	}
+	
+	@Dado("^um CEP valido e dado do produto e tipo de entrega invalido:$")
+	public void eu_possuo_um_CEP_valido_e_produto_invalido(Map<String, String> map) throws Throwable {
+		cep = map.get("cep");
+		peso = map.get("peso");
+		largura = map.get("largura");
+		altura = map.get("altura");
+		comprimento = map.get("comprimento");
+		entrega = map.get("entrega");
+		wireMockServer.stubFor(get(urlMatching("/ws/"+ cep + ".*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("resultado-pesquisa-BuscaEndereco.xml")));
+	}
 
-	@Quando("^eu informo o CEP na busca de enderecos$")
-	public void eu_informo_o_CEP_na_busca_de_endereco() throws Throwable {
+	@Quando("^eu informo o CEP no calculo de frete$")
+	public void eu_informo_o_CEP_no_calculo_de_frete() throws Throwable {
 		throwable = catchThrowable(() -> this.endereco = buscaEnderecoService.buscar(cep));
 	}
 
-	@Entao("^O resultado deve ser o endereco:$")
+	@Entao("^O resultado deve ser o valor do frete e tempo de entrega:$")
 	public void o_resultado_deve_ser_o_endereco(List<Map<String,String>> resultado)
 			throws Throwable {
-		assertThat(this.endereco.getLogradouro()).isEqualTo(resultado.get(0).get("Logradouro"));
-		assertThat(this.endereco.getLocalidade()).isEqualTo(resultado.get(0).get("Cidade"));
+		assertThat(this.frete.getValor()).isEqualTo(resultado.get(0).get("Valor do Frete "));
+		assertThat(this.frete.getTempo()).isEqualTo(resultado.get(0).get("Tempo"));
 		assertThat(throwable).isNull();
 	}
 
 	@Entao("^o retorno deve conter um valor de erro igual a \"([^\"]*)\"$")
 	public void o_retorno_deve_conter_um_valor_de_erro_igual_a(String erro) throws Throwable {
-		assertThat(endereco.getErro()).isEqualTo(erro);
+		assertThat(frete.getErro()).isEqualTo(erro);
 		assertThat(throwable).isNull();
 	}
 
