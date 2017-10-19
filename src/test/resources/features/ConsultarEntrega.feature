@@ -9,8 +9,10 @@ Funcionalidade: Consultar Entrega
       | protocolo | SQ458226057BR |
     Quando eu informo o PROTOCOLO na consulta de entrega
     Entao o resultado deve ser o status:
-      | Protocolo      | Status       |
-      | SQ458226057BR  | Em andamento |
+      | Protocolo      | Tipo		      			| Status     		 | Data		      			| Hora           | Descricao    			| Local      		 | Codigo       			| Cidade         | Uf			       			|
+      | SQ458226057BR  | OEC								| 01  					 | 05/07/2004					| 09:04			     | Saiu para entrega 	| CDD ALVORADA   | 94800971						| ALVORADA       | RS									|
+
+      
 
   Cenario: Consultar uma entrega com PROTOCOLO nao existente
     Dado um PROTOCOLO nao existente:

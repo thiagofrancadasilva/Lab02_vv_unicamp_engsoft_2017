@@ -17,13 +17,13 @@ import org.mockito.MockitoAnnotations;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 import br.unicamp.bookstore.Configuracao;
-import br.unicamp.bookstore.model.Endereco;
+
 import br.unicamp.bookstore.model.StatusEncomenda;
-import br.unicamp.bookstore.service.BuscaEnderecoService;
+
 import br.unicamp.bookstore.service.ConsultarEntregaService;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.Then;
+
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.E;
 import cucumber.api.java.pt.Entao;
@@ -71,7 +71,7 @@ public class ConsultarEntregaSteps {
 
 	@Dado("^um PROTOCOLO nao existente:$")
 	public void um_PROTOCOLO_nao_existente(Map<String, String> map) throws Throwable {
-		protocolo = map.get("cep");
+		protocolo = map.get("protocolo");
 		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/" + protocolo + ".*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("consultar-status-entrega_ERR.xml")));
 
@@ -79,7 +79,7 @@ public class ConsultarEntregaSteps {
 
 	@Dado("^um PROTOCOLO invalido:")
 	public void um_PROTOCOLO_invalido(Map<String, String> map) throws Throwable {
-		protocolo = map.get("cep");
+		protocolo = map.get("protocolo");
 		wireMockServer.stubFor(get(urlMatching("/sro_bin/sroii_xml.eventos/" + protocolo + ".*"))
 				.willReturn(aResponse().withStatus(400).withHeader("Content-Type", "text/xml")
 						.withBodyFile("consultar-status-entrega_BAD.xml")));
@@ -93,9 +93,20 @@ public class ConsultarEntregaSteps {
 	@Entao("^o resultado deve ser o status:$")
 	public void o_resultado_deve_ser_o_protocolo(List<Map<String,String>> resultado)
 			throws Throwable {
+		assertThat(this.statusEncomenda.getProtocolo()).isEqualTo(resultado.get(0).get("Protocolo"));
 		assertThat(this.statusEncomenda.getTipo()).isEqualTo(resultado.get(0).get("Tipo"));
-		assertThat(this.statusEncomenda.getStatus()).isEqualTo(resultado.get(0).get("descricao"));
+		assertThat(this.statusEncomenda.getStatus()).isEqualTo(resultado.get(0).get("Status"));
+		assertThat(this.statusEncomenda.getData()).isEqualTo(resultado.get(0).get("Data"));		
+		assertThat(this.statusEncomenda.getHora()).isEqualTo(resultado.get(0).get("Hora"));
+		assertThat(this.statusEncomenda.getDescricao()).isEqualTo(resultado.get(0).get("Descricao"));
+		assertThat(this.statusEncomenda.getLocal()).isEqualTo(resultado.get(0).get("Local"));	
+		assertThat(this.statusEncomenda.getCodigo()).isEqualTo(resultado.get(0).get("Codigo"));		
+		assertThat(this.statusEncomenda.getCidade()).isEqualTo(resultado.get(0).get("Cidade"));
+		assertThat(this.statusEncomenda.getUf()).isEqualTo(resultado.get(0).get("Uf"));
+		assertThat(this.statusEncomenda.getErro()).isEqualTo(resultado.get(0).get("Erro"));
+
 		assertThat(throwable).isNull();
+
 	}
 
 	@Entao("^o retorno deve conter um valor de erro igual a \"([^\"]*)\"$")

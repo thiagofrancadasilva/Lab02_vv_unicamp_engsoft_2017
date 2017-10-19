@@ -18,6 +18,29 @@ public class StatusEncomenda {
 	@XmlElement(name = "erro")
 	private String erro;
 	
+	@XmlElement(name = "protocolo")
+	private String protocolo;
+	
+	@XmlElement(name = "data")
+	private String data;
+	
+	@XmlElement(name = "hora")
+	private String hora;
+	
+	@XmlElement(name = "local")
+	private String local;
+	
+	@XmlElement(name = "codigo")
+	private String codigo;
+	
+	@XmlElement(name = "cidade")
+	private String cidade;
+	
+	@XmlElement(name = "uf")
+	private String uf;
+
+	
+	
 	public String getTipo() {
 		return tipo;
 	}
@@ -33,5 +56,42 @@ public class StatusEncomenda {
 	public String getErro() {
 		return erro;
 	}
+	
+	public String getProtocolo() {
+		return protocolo;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+
+	public String getHora() {
+		return hora;
+	}
+
+
+	public String getLocal() {
+		return local;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+
+	public String getCidade() {
+		return cidade;
+	}
+
+
+	public String getUf() {
+		return uf;
+	}
+
+
+
 
 }
+
+
