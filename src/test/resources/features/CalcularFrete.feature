@@ -1,38 +1,55 @@
 # language: pt
-Funcionalidade: Buscar Endereco
-  Como um usuario do sistema Bookstore
-  Desejo consultar um endereco a partir do CEP
-  Para que eu possa usar o endereco para fazer um pedido
+Funcionalidade: Calcular Frete
+  Como sistema Bookstore
+  Desejo fornecer o peso, largura, altura e comprimento do PRODUTO, o tipo de serviço e endereço do PEDIDO
+  Para que os correios calcule o valor do frete e tempo de entrega do pedido
 
-  Cenario: Consultar um endereco valido
-    Dado um CEP valido:
-      | cep | 13083970 |
-    Quando eu informo o CEP na busca de endereco
-    Entao o resultado deve ser o endereco:
-      | Logradouro       | Cidade   |
-      | Rua Carlos Gomes | Campinas |
+  Cenario: Consultar calculo do frete e tempo de entrega
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
+    Quando eu informo o CEP no calculo de frete
+    Entao O resultado deve ser o endereco: 
+      | Valor do Frete       | Tempo   |
+      | R$100,00 | 5 dias |
 
-  Cenario: Consultar um endereco com CEP nao existente
-    Dado um CEP nao existente:
-      | cep | 99999999 |
-    Quando eu informo o CEP na busca de endereco
+  Cenario: Consultar calculo do frete e tempo de entrega com CEP nao existente
+    Dado um CEP nao existente e dados do produto e tipo de entrega:
+      | cep | 99999999 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
+    Quando eu informo o CEP no calculo de frete
     Entao o retorno deve conter um valor de erro igual a "true"
+    
+   Cenario: Consultar calculo do frete e tempo de entrega com dados do produto não existente
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 0 | largura  | 0 | altura | 0 | comprimento | 0 | entrega |  |
+    Quando eu informo o CEP no calculo de frete
+    Entao o retorno deve conter um valor de erro igual a "true"   
 
-  Cenario: Consultar um endereco com CEP invalido.
-    Dado um CEP invalido:
-      | cep | 1234567890 |
-    Quando eu informo o CEP na busca de endereco
-    Entao uma excecao deve ser lancada com a mensagem de erro:
+
+  Cenario: Consultar calculo do frete e tempo de entrega com CEP invalido.
+    Dado um CEP invalido e dados do produto e tipo de entrega:
+      | cep | 1234567890 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
+    Quando eu informo o CEP no calculo de frete
+    Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
     O CEP informado e invalido
     """
 
+   Cenario: Consultar calculo do frete e tempo de entrega com dados do produto invalido
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 0 | largura  | 0 | altura | 0 | comprimento | 0 | entrega | XXX |
+    Quando eu informo o CEP no calculo de frete
+    Entao Uma excecao deve ser lancada com a mensagem de erro:
+    """
+    Os dados do produto informado são invalidos
+    """
+
   Cenario: Servico ViaCep nao responde
-    Dado um CEP valido:
-      | cep | 13083970 |
-    E o servico ViaCep nao esta respondendo
-    Quando eu informo o CEP na busca de endereco
-    Entao uma excecao deve ser lancada com a mensagem de erro:
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | PAC |
+    E O servico ViaCep nao esta respondendo 
+    Quando eu informo o CEP no calculo de frete
+    Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
     Servico indisponivel
     """
+    
