@@ -10,7 +10,23 @@ Funcionalidade: Calcular Frete
     Quando eu informo o CEP no calculo de frete
     Entao O resultado deve ser o endereco: 
       | Valor do Frete       | Tempo   |
-      | R$100,00 | 5 dias |
+      | R$10,00 | 7 dias |
+      
+  Cenario: Consultar calculo do frete e tempo de entrega
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | SEDEX |
+    Quando eu informo o CEP no calculo de frete
+    Entao O resultado deve ser o endereco: 
+      | Valor do Frete       | Tempo   |
+      | R$20,00 | 5 dias |
+      
+  Cenario: Consultar calculo do frete e tempo de entrega
+    Dado um CEP valido e dados do produto e tipo de entrega:
+      | cep | 13083970 | peso | 5 | largura  | 0.5 | altura | 2 | comprimento | 2 | entrega | SEDEX 10 |
+    Quando eu informo o CEP no calculo de frete
+    Entao O resultado deve ser o endereco: 
+      | Valor do Frete       | Tempo   |
+      | R$30,00 | 1 dias |
 
   Cenario: Consultar calculo do frete e tempo de entrega com CEP nao existente
     Dado um CEP nao existente e dados do produto e tipo de entrega:
