@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cServico>
+	<Codigo>int</Codigo>
+	<Valor>string</Valor>
+	<PrazoEntrega>string</PrazoEntrega>
+	<ValorMaoPropria>string</ValorMaoPropria>
+	<ValorAvisoRecebimento>string</ValorAvisoRecebimento>
+	<ValorValorDeclarado>string</ValorValorDeclarado>
+	<EntregaDomiciliar>string</EntregaDomiciliar>
+	<EntregaSabado>string</EntregaSabado>
+	<Erro>string</Erro>
+	<MsgErro>string</MsgErro>
+	<ValorSemAdicionais>string</ValorSemAdicionais>
+	<obsFim>string</obsFim>
+	<DataMaxEntrega>string</DataMaxEntrega>
+	<HoraMaxEntrega>string</HoraMaxEntrega>
+</cServico>

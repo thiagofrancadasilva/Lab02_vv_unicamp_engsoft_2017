@@ -17,7 +17,9 @@ import org.mockito.MockitoAnnotations;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 import br.unicamp.bookstore.Configuracao;
+import br.unicamp.bookstore.dao.DadosDeEntregaDAO;
 import br.unicamp.bookstore.model.Frete;
+import br.unicamp.bookstore.model.PrecoPrazo;
 import br.unicamp.bookstore.model.Produto;
 import br.unicamp.bookstore.model.TipoEntregaEnum;
 import br.unicamp.bookstore.service.ConsultarFreteService;
@@ -34,11 +36,16 @@ public class CalcularFreteSteps {
 
 	@Mock
 	private Configuracao configuration;
+	
+	@Mock
+	private DadosDeEntregaDAO dadosDeEntregaDAO;
 
 	@InjectMocks
 	private ConsultarFreteService consultarFreteService;
 
 	private Frete frete;
+	
+	private PrecoPrazo precoPrazo;
 
 	private String cep;
 	
@@ -53,10 +60,12 @@ public class CalcularFreteSteps {
 		wireMockServer = new WireMockServer(9876);
 		wireMockServer.start();
 		MockitoAnnotations.initMocks(this);
-		Mockito.when(configuration.getBuscarEnderecoUrl()).thenReturn("http://localhost:9876/ws");
+		Mockito.when(configuration.getConsultaPrecoPrazoUrl()).thenReturn("http://localhost:9876/ws");
+		Mockito.doNothing().when(dadosDeEntregaDAO).saveDadosDeEntrega(Mockito.anyDouble(), Mockito.anyInt());
 		cep = null;
 		produto = null;
 		entrega = null;
+		precoPrazo = null;
 		throwable = null;
 	}
 
@@ -74,7 +83,7 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
 		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete.xml")));
+				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete"+ entrega.toString() +".xml")));
 	}
 
 	@Dado("^um CEP nao existente e dado do produto e tipo de entrega valido:$")
@@ -128,13 +137,13 @@ public class CalcularFreteSteps {
 
 	@Quando("^eu informo o CEP no calculo de frete$")
 	public void eu_informo_o_CEP_no_calculo_de_frete() throws Throwable {
-		throwable = catchThrowable(() -> this.frete = consultarFreteService.buscar(produto, entrega));
+		throwable = catchThrowable(() -> this.precoPrazo = consultarFreteService.buscar(produto, entrega));
 	}
 
 	@Entao("^O resultado deve ser o valor do frete e tempo de entrega:$")
 	public void o_resultado_deve_ser_o_endereco(List<Map<String, String>> resultado) throws Throwable {
-		assertThat(this.frete.getValorFrete()).isEqualTo(resultado.get(0).get("valorFrete"));
-		assertThat(this.frete.getTempoEntrega()).isEqualTo(resultado.get(0).get("tempoEntrega"));
+		assertThat(this.precoPrazo.getValorFrete()).isEqualTo(resultado.get(0).get("valorFrete"));
+		assertThat(this.precoPrazo.getPrazoEntrega()).isEqualTo(resultado.get(0).get("tempoEntrega"));
 		assertThat(throwable).isNull();
 	}
 
