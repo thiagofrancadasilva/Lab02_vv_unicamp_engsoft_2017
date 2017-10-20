@@ -110,7 +110,6 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("largura")),
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
-		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
 		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
 	}
@@ -134,7 +133,6 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("largura")),
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
-		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
 		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_out.xml")));
 	}
@@ -153,12 +151,12 @@ public class CalcularFreteSteps {
 
 	@Entao("^o retorno deve conter um valor de erro igual a \"([^\"]*)\"$")
 	public void o_retorno_deve_conter_um_valor_de_erro_igual_a(String erro) throws Throwable {
-		assertThat(frete.getErro()).isEqualTo(erro);
+		assertThat(precoPrazo.getErro()).isEqualTo(erro);
 		assertThat(throwable).isNull();
 	}
 
-	@E("O servico ViaCep nao esta respondendo$")
-	public void o_servico_via_cep_nao_esta_respondendo() throws Throwable {
+	@E("^O servico dos Correios nao esta respondendo$")
+	public void o_servico_correios_nao_esta_respondendo() throws Throwable {
 		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200).withFixedDelay(6000)
 				.withBodyFile("calcular-frete_out.xml")));
 	}

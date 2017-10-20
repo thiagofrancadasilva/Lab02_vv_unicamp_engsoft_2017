@@ -54,7 +54,7 @@ Funcionalidade: Calcular Frete
     Quando eu informo o CEP no calculo de frete
     Entao o retorno deve conter um valor de erro igual a "true"
     
-   Cenario: Consultar calculo do frete e tempo de entrega com dados do produto não existente
+  Cenario: Consultar calculo do frete e tempo de entrega com dados do produto não existente
     Dado um CEP valido e dado do produto e tipo de entrega nao existente:
       | cep | 13083970 |
       | peso | 0 |
@@ -94,7 +94,7 @@ Funcionalidade: Calcular Frete
     Os dados do produto informado são invalidos
     """
 
-  Cenario: Servico ViaCep nao responde
+  Cenario: Servico dos Correios nao responde
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 |
       | peso | 5 |
@@ -102,10 +102,10 @@ Funcionalidade: Calcular Frete
       | altura | 2 |
       | comprimento | 2 |
       | entrega | PACVAREJO |
-    E O servico ViaCep nao esta respondendo
+    E O servico dos Correios nao esta respondendo
     Quando eu informo o CEP no calculo de frete
     Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
-    Servico indisponivel
+    Serviço indisponivel
     """
     

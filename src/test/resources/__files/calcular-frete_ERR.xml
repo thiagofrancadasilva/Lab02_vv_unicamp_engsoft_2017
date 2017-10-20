@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sroxml>
-	<erro>true</erro>
-</sroxml>
+<cServico>
+    <Erro>true</Erro>
+</cServico>
