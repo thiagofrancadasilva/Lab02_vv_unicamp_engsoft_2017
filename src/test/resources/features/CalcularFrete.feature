@@ -4,7 +4,7 @@ Funcionalidade: Calcular Frete
   Desejo fornecer o peso, largura, altura e comprimento do PRODUTO, o tipo de serviço e endereço do PEDIDO
   Para que os correios calcule o valor do frete e tempo de entrega do pedido
 
-  Cenario: Consultar calculo do frete e tempo de entrega
+  Cenario: Consultar calculo do frete e tempo de entrega PAC
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 |
       | peso | 5 |
@@ -17,7 +17,7 @@ Funcionalidade: Calcular Frete
       | Valor do Frete       | Tempo   |
       | R$ 10,00 | 7 |
       
-  Cenario: Consultar calculo do frete e tempo de entrega
+  Cenario: Consultar calculo do frete e tempo de entrega SEDEX
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 |
       | peso | 5 |
@@ -30,7 +30,7 @@ Funcionalidade: Calcular Frete
       | Valor do Frete       | Tempo   |
       | R$ 20,00 | 5 |
       
-  Cenario: Consultar calculo do frete e tempo de entrega
+  Cenario: Consultar calculo do frete e tempo de entrega SEDEX 10
     Dado um CEP valido e dado do produto e tipo de entrega valido:
       | cep | 13083970 |
       | peso | 5 |
@@ -43,29 +43,6 @@ Funcionalidade: Calcular Frete
       | Valor do Frete       | Tempo   |
       | R$ 30,00 | 1 |
 
-  Cenario: Consultar calculo do frete e tempo de entrega com CEP nao existente
-    Dado um CEP nao existente e dado do produto e tipo de entrega valido:
-      | cep | 99999999 |
-      | peso | 5 |
-      | largura  | 0.5 |
-      | altura | 2 |
-      | comprimento | 2 |
-      | entrega | PACVAREJO |
-    Quando eu informo o CEP no calculo de frete
-    Entao o retorno deve conter um valor de erro igual a "true"
-    
-  Cenario: Consultar calculo do frete e tempo de entrega com dados do produto não existente
-    Dado um CEP valido e dado do produto e tipo de entrega nao existente:
-      | cep | 13083970 |
-      | peso | 0 |
-      | largura  | 0 |
-      | altura | 0 |
-      | comprimento | 0 |
-      | entrega |  |
-    Quando eu informo o CEP no calculo de frete
-    Entao o retorno deve conter um valor de erro igual a "true"   
-
-
   Cenario: Consultar calculo do frete e tempo de entrega com CEP invalido.
     Dado um CEP invalido e dado do produto e tipo de entrega valido:
       | cep | 1234567890 |
@@ -77,7 +54,7 @@ Funcionalidade: Calcular Frete
     Quando eu informo o CEP no calculo de frete
     Entao Uma excecao deve ser lancada com a mensagem de erro:
     """
-    O CEP informado e invalido
+    O CEP informado é invalido
     """
 
    Cenario: Consultar calculo do frete e tempo de entrega com dados do produto invalido

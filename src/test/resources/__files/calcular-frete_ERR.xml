@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cServico>
-    <Erro>true</Erro>
+    <Erro>99</Erro>
+    <MsgErro>Os dados do produto informado são invalidos</MsgErro>
 </cServico>

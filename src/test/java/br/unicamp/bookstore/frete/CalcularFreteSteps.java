@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 
 import br.unicamp.bookstore.Configuracao;
 import br.unicamp.bookstore.dao.DadosDeEntregaDAO;
-import br.unicamp.bookstore.model.Frete;
 import br.unicamp.bookstore.model.PrecoPrazo;
 import br.unicamp.bookstore.model.Produto;
 import br.unicamp.bookstore.model.TipoEntregaEnum;
@@ -47,8 +46,6 @@ public class CalcularFreteSteps {
 	@InjectMocks
 	private ConsultarFreteService consultarFreteService;
 
-	private Frete frete;
-	
 	private PrecoPrazo precoPrazo;
 
 	private String cep;
@@ -90,30 +87,6 @@ public class CalcularFreteSteps {
 				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_"+ entrega.toString() +".xml")));
 	}
 
-	@Dado("^um CEP nao existente e dado do produto e tipo de entrega valido:$")
-	public void um_CEP_nao_existente_e_produto_valido(Map<String, String> map) throws Throwable {
-		cep = map.get("cep");
-		produto = new Produto(Double.valueOf(map.get("peso")), 
-				Double.valueOf(map.get("largura")),
-				Double.valueOf(map.get("altura")),
-				Double.valueOf(map.get("comprimento")));
-		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
-
-	}
-
-	@Dado("^um CEP valido e dado do produto e tipo de entrega nao existente:$")
-	public void eu_possuo_um_CEP_valido_e_produto_nao_existente(Map<String, String> map) throws Throwable {
-		cep = map.get("cep");
-		produto = new Produto(Double.valueOf(map.get("peso")), 
-				Double.valueOf(map.get("largura")),
-				Double.valueOf(map.get("altura")),
-				Double.valueOf(map.get("comprimento")));
-		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
-	}
-
 	@Dado("^um CEP invalido e dado do produto e tipo de entrega valido:$")
 	public void um_CEP_invalido_e_produto_valido(Map<String, String> map) throws Throwable {
 		cep = map.get("cep");
@@ -134,7 +107,7 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_out.xml")));
+				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
 	}
 
 	@Quando("^eu informo o CEP no calculo de frete$")
@@ -146,12 +119,6 @@ public class CalcularFreteSteps {
 	public void o_resultado_deve_ser_o_endereco(List<Map<String, String>> resultado) throws Throwable {
 		assertThat(CURRENCY_PT_BR_FORMAT.format(this.precoPrazo.getValorFrete())).isEqualTo(resultado.get(0).get("Valor do Frete"));
 		assertThat(this.precoPrazo.getPrazoEntrega().toString()).isEqualTo(resultado.get(0).get("Tempo"));
-		assertThat(throwable).isNull();
-	}
-
-	@Entao("^o retorno deve conter um valor de erro igual a \"([^\"]*)\"$")
-	public void o_retorno_deve_conter_um_valor_de_erro_igual_a(String erro) throws Throwable {
-		assertThat(precoPrazo.getErro()).isEqualTo(erro);
 		assertThat(throwable).isNull();
 	}
 

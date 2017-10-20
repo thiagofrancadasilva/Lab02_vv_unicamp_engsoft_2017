@@ -2,4 +2,5 @@
 <cServico>
 	<Valor>10,00</Valor>
 	<PrazoEntrega>7</PrazoEntrega>
+	<Erro>0</Erro>
 </cServico>
