@@ -6,7 +6,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.mockito.InjectMocks;
@@ -33,6 +35,8 @@ import cucumber.api.java.pt.Quando;
 public class CalcularFreteSteps {
 
 	public WireMockServer wireMockServer;
+	
+	private static final NumberFormat CURRENCY_PT_BR_FORMAT = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
 	@Mock
 	private Configuracao configuration;
@@ -82,8 +86,8 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete"+ entrega.toString() +".xml")));
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_"+ entrega.toString() +".xml")));
 	}
 
 	@Dado("^um CEP nao existente e dado do produto e tipo de entrega valido:$")
@@ -94,7 +98,7 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
 				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
 
 	}
@@ -107,8 +111,8 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete.xml")));
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_ERR.xml")));
 	}
 
 	@Dado("^um CEP invalido e dado do produto e tipo de entrega valido:$")
@@ -119,7 +123,7 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(400)
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(400)
 				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_BAD.xml")));
 	}
 
@@ -131,19 +135,19 @@ public class CalcularFreteSteps {
 				Double.valueOf(map.get("altura")),
 				Double.valueOf(map.get("comprimento")));
 		entrega = TipoEntregaEnum.valueOf(map.get("entrega"));
-		wireMockServer.stubFor(get(urlMatching("/ws/" + cep + ".*")).willReturn(aResponse().withStatus(200)
-				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete.xml")));
+		wireMockServer.stubFor(get(urlMatching("/ws/.*")).willReturn(aResponse().withStatus(200)
+				.withHeader("Content-Type", "text/xml").withBodyFile("calcular-frete_out.xml")));
 	}
 
 	@Quando("^eu informo o CEP no calculo de frete$")
 	public void eu_informo_o_CEP_no_calculo_de_frete() throws Throwable {
-		throwable = catchThrowable(() -> this.precoPrazo = consultarFreteService.buscar(produto, entrega));
+		throwable = catchThrowable(() -> this.precoPrazo = consultarFreteService.buscar(produto, entrega, cep));
 	}
 
 	@Entao("^O resultado deve ser o valor do frete e tempo de entrega:$")
 	public void o_resultado_deve_ser_o_endereco(List<Map<String, String>> resultado) throws Throwable {
-		assertThat(this.precoPrazo.getValorFrete()).isEqualTo(resultado.get(0).get("valorFrete"));
-		assertThat(this.precoPrazo.getPrazoEntrega()).isEqualTo(resultado.get(0).get("tempoEntrega"));
+		assertThat(CURRENCY_PT_BR_FORMAT.format(this.precoPrazo.getValorFrete())).isEqualTo(resultado.get(0).get("Valor do Frete"));
+		assertThat(this.precoPrazo.getPrazoEntrega().toString()).isEqualTo(resultado.get(0).get("Tempo"));
 		assertThat(throwable).isNull();
 	}
 

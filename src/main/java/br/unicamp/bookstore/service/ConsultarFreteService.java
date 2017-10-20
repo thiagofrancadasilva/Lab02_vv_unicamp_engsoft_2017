@@ -11,9 +11,9 @@ public class ConsultarFreteService {
 
   private Configuracao configuracao;
 
-  public PrecoPrazo buscar(Produto produto, TipoEntregaEnum entrega) throws Exception {
+  public PrecoPrazo buscar(Produto produto, TipoEntregaEnum entrega, String cep) throws Exception {
     String url = String.format("%s/CalcPrecoPrazo?%s", configuracao.getConsultaPrecoPrazoUrl(), 
-    		"nCdServico=" + entrega.getCodigo() + produto.toQueryString());
+    		"sCepDestino=" + cep + "&nCdServico=" + entrega.getCodigo() + produto.toQueryString());
     return new RemoteService().getAndParseXml(url, PrecoPrazo.class);
   }
 
